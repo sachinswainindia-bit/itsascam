@@ -56,16 +56,14 @@
       height: 60px;
       font-size: 18px;
       border: none;
-      border-radius: 32px;
+      border-radius: 32px; /* nicely rounded */
       cursor: pointer;
-      transition: transform 0.25s cubic-bezier(.34,1.56,.64,1); /* bouncy */
     }
 
     #yes {
       left: 0;
       background: #ff4d88;
       color: white;
-      transform-origin: center;
     }
 
     #no {
@@ -132,25 +130,15 @@
 
   <script>
     let heartInterval = null;
-    let yesClicks = 0;
     let noEscaped = false;
-    const MAX_CLICKS = 10;
 
     document.addEventListener("DOMContentLoaded", () => {
       const yesBtn = document.getElementById("yes");
       const noBtn = document.getElementById("no");
       const gif = document.getElementById("gif");
 
-      // YES button — eased growth
+      // YES button (no size changes)
       yesBtn.addEventListener("click", () => {
-        yesClicks = Math.min(yesClicks + 1, MAX_CLICKS);
-
-        const progress = yesClicks / MAX_CLICKS;   // 0 → 1
-        const eased = Math.pow(progress, 2);       // ease-in
-        const scale = 1 + eased;                   // 1 → 2
-
-        yesBtn.style.transform = `scale(${scale})`;
-
         document.body.style.background = "#ffb3d9";
         document.querySelector("h1").innerText = "YAYYY 💘";
         document.querySelector("p").innerText =
@@ -194,3 +182,4 @@
 
 </body>
 </html>
+
