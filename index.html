@@ -42,23 +42,23 @@
       padding: 0 16px;
     }
 
-    /* Button wrapper */
+    /* Button wrapper — locked layout */
     .btn-group {
       position: relative;
-      width: 260px; /* LOCK layout width */
-      height: 70px; /* LOCK layout height */
+      width: 260px;
+      height: 80px;
     }
 
     button {
       position: absolute;
       top: 0;
-      font-size: clamp(18px, 4.5vw, 22px);
-      padding: 16px 26px;
+      width: 120px;
+      height: 60px;
+      font-size: 18px;
       border: none;
-      border-radius: 28px; /* MORE ROUNDED */
+      border-radius: 32px;
       cursor: pointer;
-      min-width: 120px;
-      transition: transform 0.2s ease;
+      transition: transform 0.25s cubic-bezier(.34,1.56,.64,1); /* bouncy */
     }
 
     #yes {
@@ -86,6 +86,7 @@
       100% { transform: scale(1); }
     }
 
+    /* Floating hearts */
     .heart {
       position: fixed;
       bottom: -20px;
@@ -131,18 +132,24 @@
 
   <script>
     let heartInterval = null;
-    let yesScale = 1;
+    let yesClicks = 0;
     let noEscaped = false;
+    const MAX_CLICKS = 10;
 
     document.addEventListener("DOMContentLoaded", () => {
       const yesBtn = document.getElementById("yes");
       const noBtn = document.getElementById("no");
       const gif = document.getElementById("gif");
 
+      // YES button — eased growth
       yesBtn.addEventListener("click", () => {
-        // grow YES by 10%, cap at 2x
-        yesScale = Math.min(yesScale * 1.1, 2);
-        yesBtn.style.transform = `scale(${yesScale})`;
+        yesClicks = Math.min(yesClicks + 1, MAX_CLICKS);
+
+        const progress = yesClicks / MAX_CLICKS;   // 0 → 1
+        const eased = Math.pow(progress, 2);       // ease-in
+        const scale = 1 + eased;                   // 1 → 2
+
+        yesBtn.style.transform = `scale(${scale})`;
 
         document.body.style.background = "#ffb3d9";
         document.querySelector("h1").innerText = "YAYYY 💘";
@@ -164,7 +171,7 @@
 
     function escapeNo(btn) {
       if (!noEscaped) {
-        btn.style.position = "fixed"; // escape without layout shift
+        btn.style.position = "fixed";
         noEscaped = true;
       }
 
